@@ -46,3 +46,5 @@ for i in range(0, num_instants - 1):
     w_array[i+1, 1:3] = w_bIb + (k1 + 2*k2 + 2*k3 + k4)/6
 
 np.savetxt("simplified_actuator_tc_data.csv", w_array[:, :], delimiter=",")
+end = timer.time()
+print(end-start)
