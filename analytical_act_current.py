@@ -36,7 +36,7 @@ def getAnalyticalCurrent(v_duty_cycle, edgeCurrentList, t):  #gives current at a
     return current_t
 
 
-def getCurrentList(v_duty_cycle, t, n, edgeCurrentList,  I0): # gives current values at time instants in a given array input: duty cycle, array of time instants, number of time instants, initial current
+def getCurrentList(v_duty_cycle, t, n, edgeCurrentList): # gives current values at time instants in a given array input: duty cycle, array of time instants, number of time instants, initial current
     currentList = np.zeros((n, 3))
     for i in range(0, n):
         currentList[i, :] = getAnalyticalCurrent(v_duty_cycle, edgeCurrentList, t[i])   # current[ti]
