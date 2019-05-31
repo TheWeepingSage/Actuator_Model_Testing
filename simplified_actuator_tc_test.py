@@ -45,7 +45,7 @@ for j in range(0, 2):
             k2 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k3 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k4 = w_dot_BI(currentArray[2], getMag_b(intTimeArr[2])) * h
-            w_array[i+1, 1:3] = w_bIb + (k1 + 2*k2 + 2*k3 + k4)/6
+            w_array[i+1, 1:4] = w_bIb + (k1 + 2*k2 + 2*k3 + k4)/6
         I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
 
 
