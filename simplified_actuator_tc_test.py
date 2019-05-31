@@ -9,10 +9,10 @@ start = timer.time()
 v_duty_cycle = np.array([3, 4, 5])*1e-3
 timeArr = tc.getTimeArr(v_duty_cycle)
 num_instants_per_cycle = len(timeArr)
-num_cycles = int(2 * CONTROL_STEP * PWM_FREQUENCY)
+num_cycles = int(CONTROL_STEP * PWM_FREQUENCY)
 
 time = np.zeros(1)
-for i in range(0, num_cycles):
+for i in range(0, 2 * num_cycles):
     time = np.concatenate((time, timeArr + i / PWM_FREQUENCY))
 
 w_array = np.zeros((len(time), 4))
@@ -32,7 +32,7 @@ def getMag_b(time):
 
 
 for j in range(0, 2):
-    for k in range(j * int(num_cycles / 2), (j + 1) * int(num_cycles/2)):
+    for k in range(j * int(num_cycles), (j + 1) * int(num_cycles)):
         edgeCurrentArray = aac.getEdgeCurrent(v_duty_cycle, I0)
         currentArray = np.zeros((3, 3))
         for i in range(k * num_instants_per_cycle, (k + 1) * num_instants_per_cycle):
