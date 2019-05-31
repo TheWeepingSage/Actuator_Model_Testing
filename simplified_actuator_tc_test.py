@@ -32,7 +32,7 @@ def getMag_b(time):
 
 
 for j in range(0, 2):
-    for k in range(0, int(num_cycles / 2)):
+    for k in range(j * int(num_cycles / 2), (j + 1) * int(num_cycles/2)):
         edgeCurrentArray = aac.getEdgeCurrent(v_duty_cycle, I0)
         currentArray = np.zeros((3, 3))
         for i in range(k * num_instants_per_cycle, (k + 1) * num_instants_per_cycle):
