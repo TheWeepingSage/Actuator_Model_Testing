@@ -18,7 +18,7 @@ for i in range(0, 2 * num_cycles):
 w_array = np.zeros((len(time), 4))
 w_array[:, 0] = time
 I0 = np.zeros(3)
-
+time_period = 1/PWM_FREQUENCY
 
 def w_dot_BI(current, b):
     v_mu = No_Turns*np.multiply(v_A_Torquer, current)
@@ -35,8 +35,9 @@ for j in range(0, 2):
     for k in range(j * int(num_cycles), (j + 1) * int(num_cycles)):
         edgeCurrentArray = aac.getEdgeCurrent(v_duty_cycle, I0)
         currentArray = np.zeros((3, 3))
+        print("cycle ", k + 1, "control step", j + 1)
         for i in range(k * num_instants_per_cycle, (k + 1) * num_instants_per_cycle):
-            intTimeArr = np.linspace(time[i], time[i+1], 3, endpoint=True)
+            intTimeArr = np.linspace(time[i] % time_period, time[i+1] % time_period, 3, endpoint=True)
             currentArray = aac.getCurrentList(v_duty_cycle, intTimeArr, 3, edgeCurrentArray)
             h = time[i+1] - time[i]
             w_bIb = w_array[i, 1:4]
