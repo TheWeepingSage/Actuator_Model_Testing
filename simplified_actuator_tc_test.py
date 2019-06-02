@@ -27,7 +27,7 @@ def w_dot_BI(current, b):
 
 
 def getMag_b(time):
-    v_mag_b = np.array([1, 2, 3])*1e-3*np.sin(time)
+    v_mag_b = np.array([1, 2, 3])*1e-3
     return v_mag_b
 
 
@@ -50,6 +50,6 @@ for j in range(0, 2):
         I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
 
 
-np.savetxt("simplified_actuator_tc_data.csv", w_array[:, :], delimiter=",")
+np.savetxt("simplified_actuator_tc_data.csv_2", w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)

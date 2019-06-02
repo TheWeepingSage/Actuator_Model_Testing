@@ -18,7 +18,7 @@ for i in range(0, 2 * num_cycles):
 w_array = np.zeros((len(time), 4))
 w_array[:, 0] = time
 I0 = np.zeros(3)
-time_period = 1/PWM_FREQUENCY
+time_period = 1/PWM_FREQUENCY 
 
 def w_dot_BI(current, b):
     v_mu = No_Turns*np.multiply(v_A_Torquer, current)
@@ -27,7 +27,7 @@ def w_dot_BI(current, b):
 
 
 def getMag_b(time):
-    v_mag_b = np.array([1, 2, 3])*1e-3*np.sin(time)
+    v_mag_b = np.array([1, 2, 3])*1e-3
     return v_mag_b
 
 
@@ -50,6 +50,6 @@ for j in range(0, 2):
         I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
 
 
-np.savetxt("simplified_actuator_minstep_data.csv", w_array[:, :], delimiter=",")
+np.savetxt("simplified_actuator_minstep_data_2.csv", w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
