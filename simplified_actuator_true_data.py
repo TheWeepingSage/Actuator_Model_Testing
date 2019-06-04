@@ -1,22 +1,20 @@
 import analytical_act_current as aac
-from constants_1U import PWM_FREQUENCY, CONTROL_STEP, PWM_AMPLITUDE, v_A_Torquer, RESISTANCE, INDUCTANCE
+from constants_1U import PWM_FREQUENCY, PWM_AMPLITUDE as V_max, v_A_Torquer, RESISTANCE as R, INDUCTANCE as L, No_Turns
 import numpy as np
 import matplotlib.pyplot as plt
 
-v_duty_cycle = np.array([3, 4, 5])*1e-3
-time_period = 1/PWM_FREQUENCY
-edgeCurrentArray_1 = aac.getEdgeCurrent(v_duty_cycle, np.zeros(3))
-edgeCurrentArray_2 = aac.getEdgeCurrent(v_duty_cycle, edgeCurrentArray_1[len(edgeCurrentArray_1)-1, :])
-w_array = np.zeros((len(edgeCurrentArray_1), 3))
+duty = np.array([3, 4, 5])*1e-3
+t_p = 1/PWM_FREQUENCY
+edgeCurrent_1 = aac.getEdgeCurrent(duty, np.zeros(3))
+edgeCurrent_2 = aac.getEdgeCurrent(duty, edgeCurrent_1[len(edgeCurrent_1)-1, :])
+w_array = np.zeros((len(edgeCurrent_1), 3))
 for i in range(0, 2000):
-    w_array[i + 1] = w_array[i] + PWM_AMPLITUDE/RESISTANCE*time_period*(v_duty_cycle[1]-v_duty_cycle[2])
-    w_array[i + 1] = w_array[i + 1] - PWM_AMPLITUDE/RESISTANCE*INDUCTANCE/RESISTANCE*(np.exp(-time_period*(1 - v_duty_cycle[1])*RESISTANCE/INDUCTANCE)-np.exp(-time_period*(1-v_duty_cycle[2])*RESISTANCE/INDUCTANCE))
-    w_array[i + 1] = w_array[i + 1] + INDUCTANCE/RESISTANCE * (edgeCurrentArray_1[2*(i%2000), 1]-edgeCurrentArray_1[2*(i%2000), 2])*(1 - np.exp(-RESISTANCE*time_period/INDUCTANCE))
-    print(w_array[i+1]*1e-3)
+    w_array[i + 1] = w_array[i] + V_max/R*t_p*(3*duty[1]-2*duty[2])
+    w_array[i + 1] = w_array[i + 1] - V_max/R*L/R*(3*np.exp(-t_p*(1 - duty[1])*R/L)-2*np.exp(-t_p*(1-duty[2])*R/L))
+    w_array[i + 1] = w_array[i + 1] + L/R * (3*edgeCurrent_1[2*(i%2000), 1]-2*edgeCurrent_1[2*(i%2000), 2])*(1 - np.exp(-R*t_p/L))
 for i in range(2000, 4000):
-    w_array[i + 1] = w_array[i] + PWM_AMPLITUDE/RESISTANCE*time_period*(v_duty_cycle[1]-v_duty_cycle[2])
-    w_array[i + 1] = w_array[i + 1] - PWM_AMPLITUDE/RESISTANCE*INDUCTANCE/RESISTANCE*(np.exp(-time_period*(1 - v_duty_cycle[1])*RESISTANCE/INDUCTANCE)-np.exp(-time_period*(1-v_duty_cycle[2])*RESISTANCE/INDUCTANCE))
-    w_array[i + 1] = w_array[i + 1] + INDUCTANCE/RESISTANCE * (edgeCurrentArray_2[2*(i%2000), 1]-edgeCurrentArray_1[2*(i%2000), 2])*(1 - np.exp(-RESISTANCE*time_period/INDUCTANCE))
-    print(w_array[i+1]*1e-3)
-w_array = w_array * v_A_Torquer[0]*1e-3
-print(w_array[len(w_array)-1])
+    w_array[i + 1] = w_array[i] + V_max/R*t_p*(3*duty[1]-2*duty[2])
+    w_array[i + 1] = w_array[i + 1] - V_max/R*L/R*(3*np.exp(-t_p*(1 - duty[1])*R/L)-2*np.exp(-t_p*(1-duty[2])*R/L))
+    w_array[i + 1] = w_array[i + 1] + L/R * (3*edgeCurrent_2[2*(i%2000), 1]-2*edgeCurrent_2[2*(i%2000), 2])*(1 - np.exp(-R*t_p/L))
+w_array = w_array * v_A_Torquer[0]*1e-3*No_Turns
+np.savetxt("simplified_actuator_true_data.csv", w_array[:, :], delimiter=",")
