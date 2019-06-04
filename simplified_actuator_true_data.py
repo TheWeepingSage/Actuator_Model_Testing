@@ -18,5 +18,5 @@ for i in range(2000, 4000):
     w_array[i + 1] = w_array[i + 1] - PWM_AMPLITUDE/RESISTANCE*INDUCTANCE/RESISTANCE*(np.exp(-time_period*(1 - v_duty_cycle[1])*RESISTANCE/INDUCTANCE)-np.exp(-time_period*(1-v_duty_cycle[2])*RESISTANCE/INDUCTANCE))
     w_array[i + 1] = w_array[i + 1] + INDUCTANCE/RESISTANCE * (edgeCurrentArray_2[2*(i%2000), 1]-edgeCurrentArray_1[2*(i%2000), 2])*(1 - np.exp(-RESISTANCE*time_period/INDUCTANCE))
     print(w_array[i+1]*1e-3)
-w_array = w_array * v_A_Torquer[0]
+w_array = w_array * v_A_Torquer[0]*1e-3
 print(w_array[len(w_array)-1])
