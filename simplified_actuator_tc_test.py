@@ -32,8 +32,8 @@ def getMag_b(time):
 
 
 for j in range(0, 2):
+    edgeCurrentArray = aac.getEdgeCurrent(v_duty_cycle, I0)
     for k in range(j * int(num_cycles), (j + 1) * int(num_cycles)):
-        edgeCurrentArray = aac.getEdgeCurrent(v_duty_cycle, I0)
         currentArray = np.zeros((3, 3))
         print("cycle ", k + 1, "control step", j + 1)
         for i in range(k * num_instants_per_cycle, (k + 1) * num_instants_per_cycle):
@@ -47,9 +47,9 @@ for j in range(0, 2):
             k3 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k4 = w_dot_BI(currentArray[2], getMag_b(intTimeArr[2])) * h
             w_array[i+1, 1:4] = w_bIb + (k1 + 2*k2 + 2*k3 + k4)/6
-        I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
+    I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
 
 
-np.savetxt("simplified_actuator_tc_data.csv_2", w_array[:, :], delimiter=",")
+np.savetxt("simplified_actuator_tc_data_2.csv", w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
