@@ -14,6 +14,7 @@ for i in range(0, num_steps):
     edgeCurrent = aac.getEdgeCurrent(duty, I0)
     for j in range(0, num_cycles_per_step):
         angular_velocity = w_array[i*num_cycles_per_step+j] + V_max/R*t_p*(2*duty[0]-1*duty[1])
+        angular_velocity = angular_velocity + (V_max*L/R/R)*np.exp(-t_p*R/L)*(2-1)
         angular_velocity = angular_velocity - V_max/R*L/R*(2*np.exp(-t_p*(1 - duty[0])*R/L)-1*np.exp(-t_p*(1-duty[1])*R/L))
         angular_velocity = angular_velocity + L/R * (2*edgeCurrent[2*(i%2000), 0]-1*edgeCurrent[2*(i%2000), 1])*(1 - np.exp(-R*t_p/L))
         w_array = np.vstack((w_array, angular_velocity))
