@@ -46,6 +46,6 @@ for i in range(0, num_steps):
             w_array = np.vstack((w_array, angular_velocity_new))
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
 
-np.savetxt("simplified_actuator_tc_long_data.csv", w_array[:, :], delimiter=",")
+np.savetxt("simplified_actuator_minstep_long_data.csv", w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
