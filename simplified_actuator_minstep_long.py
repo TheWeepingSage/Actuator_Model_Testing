@@ -42,10 +42,9 @@ for i in range(0, num_steps):
             k2 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k3 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k4 = w_dot_BI(currentArray[2], getMag_b(intTimeArr[2])) * h
-            angular_velocity_new = np.concatenate((time[k+1], (w_array[i*num_cycles_per_step+k, 1:4]+(k1+2*k2+2*k3+k4)/6)))
+            angular_velocity_new = np.hstack((time[k+1], w_array[i*num_cycles_per_step+k, 1:4]+(k1+2*k2+2*k3+k4)/6))
             w_array = np.vstack((w_array, angular_velocity_new))
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
-
-np.savetxt("simplified_actuator_minstep_long_data.csv", w_array[:, :], delimiter=",")
+    np.savetxt("simplified_actuator_minstep_long_data_cycle%d.csv"%i , w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)

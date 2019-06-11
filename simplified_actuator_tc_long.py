@@ -21,16 +21,19 @@ def getMag_b(time):
 I0 = np.zeros(3)
 time_period = 1/PWM_FREQUENCY
 num_steps = 8
-w_array = np.zeros(4)
+w_initial = np.zeros((1, 4))
 time = np.zeros(1)
 num_cycles_per_step = int(CONTROL_STEP/time_period)
 
 for i in range(0, num_steps):
+    w_array = w_initial
     duty = np.array([i+1, (-1**i)*(i+2), i+3])*1e-3
+
     timeArr = tc.getTimeArr(duty)
     num_instants_per_cycle = len(timeArr)
     for j in range(0, num_cycles_per_step):
         time = np.concatenate((time, timeArr+j*time_period))
+
     edgeCurrentArray = aac.getEdgeCurrent(duty, I0)
     for j in range(0, num_cycles_per_step):
         print("step ", i+1, " cycle ", j)
@@ -42,10 +45,9 @@ for i in range(0, num_steps):
             k2 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k3 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k4 = w_dot_BI(currentArray[2], getMag_b(intTimeArr[2])) * h
-            angular_velocity_new = np.concatenate((time[k+1], (w_array[i*num_cycles_per_step+k, 1:4]+(k1+2*k2+2*k3+k4)/6)))
+            angular_velocity_new = np.hstack((time[k+1], w_array[i*num_cycles_per_step+k, 1:4]+(k1+2*k2+2*k3+k4)/6))
             w_array = np.vstack((w_array, angular_velocity_new))
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
-
-np.savetxt("simplified_actuator_tc_long_data.csv", w_array[:, :], delimiter=",")
+    np.savetxt("simplified_actuator_tc_long_data_cycle_%d.csv"%i, w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
