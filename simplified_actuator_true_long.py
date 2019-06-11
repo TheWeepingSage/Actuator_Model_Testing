@@ -16,7 +16,7 @@ for i in range(0, num_steps):
         angular_velocity = w_array[i*num_cycles_per_step+j] + V_max/R*t_p*(1*duty[2]-3*duty[0])
         angular_velocity = angular_velocity + (V_max*L/R/R)*np.exp(-t_p*R/L)*(1-3)
         angular_velocity = angular_velocity - V_max/R*L/R*(1*np.exp(-t_p*(1 - duty[2])*R/L)-3*np.exp(-t_p*(1-duty[0])*R/L))
-        angular_velocity = angular_velocity + L/R * (1*edgeCurrent[2*(i%2000), 2]-3*edgeCurrent[2*(i%2000), 0])*(1 - np.exp(-R*t_p/L))
+        angular_velocity = angular_velocity + L/R*(1*edgeCurrent[2*(i%2000), 2]-3*edgeCurrent[2*(i%2000), 0])*(1 - np.exp(-R*t_p/L))
         w_array = np.vstack((w_array, angular_velocity))
     I0 = edgeCurrent[len(edgeCurrent) - 1]
 w_array = w_array * v_A_Torquer[0]*1e-3*No_Turns
