@@ -7,39 +7,40 @@ import time as timer
 start = timer.time()
 
 
-def w_dot_BI(current, b):
-    v_mu = No_Turns*np.multiply(v_A_Torquer, current)
-    v_w_dot = np.cross(v_mu, b)
-    return v_w_dot
+def w_dot_BI(current, b):   # defining the dynamics for the system
+    v_mu = No_Turns*np.multiply(v_A_Torquer, current)   # mu = I*A*n
+    v_w_dot = np.cross(v_mu, b)     # torque = mu x B
+    return v_w_dot      # w_dot = torque
 
 
-def getMag_b(time):
-    v_mag_b = np.array([1, 2, 3])*1e-3
+def getMag_b(time):     # defining the magnetic field in the body frame(constant in the body frame so that we can integrate analytically)
+    v_mag_b = np.array([1, 2, 3])*1e-3      # B =(1e-3, 2e-3, 3e-3)
     return v_mag_b
 
 
-I0 = np.zeros(3)
+I0 = np.zeros(3)    # initial current is 0
 time_period = 1/PWM_FREQUENCY
-num_steps = 8
-w_initial = np.zeros((1, 4))
+num_steps = 2
+w_initial = np.zeros((1, 4))    # w_initial = 0
 num_cycles_per_step = int(CONTROL_STEP/time_period)
 
 for i in range(0, num_steps):
-    w_array = w_initial
-    time = np.array([i*2])
-    duty = np.array([i+1, (-1**i)*(i+2), i+3])*1e-3
+    w_array = w_initial     # initialising angular velocity for the control step
+    time = np.array([i*2])      # initialising the time array for the control step
+    duty = np.array([i+1, (-1**i)*(i+2), i+3])*1e-3     # initialising the duty cycle
 
-    timeArr = tc.getTimeArr(duty)
+    timeArr = tc.getTimeArr(duty)   # getting the time array for one PWM cycle
     num_instants_per_cycle = len(timeArr)
     for j in range(0, num_cycles_per_step):
-        time = np.concatenate((time, timeArr+j*time_period))
+        time = np.concatenate((time, timeArr+j*time_period))    # setting the time array for the whole step
 
-    edgeCurrentArray = aac.getEdgeCurrent(duty, I0)
+    edgeCurrentArray = aac.getEdgeCurrent(duty, I0)     # getting the current at the edges
+
     for j in range(0, num_cycles_per_step):
         print("step ", i+1, " cycle ", j)
         for k in range(j*num_instants_per_cycle, (j+1)*num_instants_per_cycle):
-            intTimeArr = np.linspace(time[k]%2, time[k+1]%2, 3, endpoint=True)
-            currentArray = aac.getCurrentList(duty, intTimeArr, 3, edgeCurrentArray)
+            intTimeArr = np.linspace(time[k]%2, time[k+1]%2, 3, endpoint=True)      # setting the time array for the integration step
+            currentArray = aac.getCurrentList(duty, intTimeArr, 3, edgeCurrentArray)    # getting the current for the integration cycles
             h = time[k + 1] - time[k]
             k1 = w_dot_BI(currentArray[0], getMag_b(intTimeArr[0])) * h
             k2 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
