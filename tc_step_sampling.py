@@ -12,7 +12,3 @@ def getTimeArr(duty_cycle):
     time_arr1 = np.concatenate((time_arr1, np.unique(peak_time)))
     time_arr1 = np.append(time_arr1, 1/PWM_FREQUENCY)
     return np.unique(time_arr1)
-
-
-duty_cycle = np.array([1, 2, 3]) * 1e-4
-getTimeArr(duty_cycle)
