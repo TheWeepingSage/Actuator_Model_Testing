@@ -5,7 +5,7 @@ import numpy as np
 
 t_p = 1/PWM_FREQUENCY
 w_array = np.zeros((1, 3))
-num_steps = 2
+num_steps = 3
 I0 = np.zeros(3)
 num_cycles_per_step = int(CONTROL_STEP/t_p)
 

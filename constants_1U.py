@@ -102,8 +102,8 @@ MODEL_STEP=0.1
 CONTROL_STEP = 2.0	#control cycle time period in second
 h = 0.001 #step size of integration in seconds
 
-INDUCTANCE = 1e-3	#Inductance of torquer in Henry
-RESISTANCE = 100	#Resistance of torquer	in Ohm
+INDUCTANCE = 68e-3	#Inductance of torquer in Henry
+RESISTANCE = 107.0	#Resistance of torquer	in Ohm
 PWM_AMPLITUDE = 3.3	#PWM amplitude in volt
 PWM_FREQUENCY = 1e3 #frequency of PWM signal
 No_Turns=450        #No. of turns of torquer
