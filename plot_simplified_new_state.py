@@ -30,7 +30,7 @@ array_true_2 = np.loadtxt("simplified_actuator_true_data_6.csv", delimiter=",")
 plt.plot(array_old[:, 0], array_old[:, 1], label="old w_0")
 #plt.plot(array_new[:, 0], array_new[:, 1], label="new w_0")
 plt.plot(time_arr, -array_true_2, label="true_old w_0")
-#plt.plot(time_arr, array_true[:, 0]/(-25), label="true w_0")
+plt.plot(time_arr, array_true[:, 0], label="true w_0")
 plt.legend(loc="upper left")
 plt.show()
 w_final_tc = array_old[len(array_old)-1, 1:4]
