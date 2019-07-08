@@ -20,14 +20,14 @@ def getMag_b(time):     # defining the magnetic field in the body frame(constant
 
 I0 = np.zeros(3)    # initial current is 0
 time_period = 1/PWM_FREQUENCY
-num_steps = 3
+num_steps = 2
 w_initial = np.zeros((1, 4))
 num_cycles_per_step = int(CONTROL_STEP/time_period)
 
 for i in range(0, num_steps):
     w_array = w_initial     # initialising angular velocity for the control step
     time = np.array([i*2])      # initialising the time array for the control step
-    duty = np.array([i+1, (-1**i)*(i+2), i+3])*1e-3     # initialising the duty cycle
+    duty = np.array([3, 4, 5])*1e-3       # initialising the duty cycle
 
     timeArr = tc.getTimeArr(duty)   # getting the time array for one PWM cycle
     num_instants_per_cycle = len(timeArr)
@@ -51,6 +51,6 @@ for i in range(0, num_steps):
             w_array = np.vstack((w_array, angular_velocity_new))
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
     w_initial = np.array([w_array[len(w_array)-1]])
-    np.savetxt("simplified_actuator_tc_long_data_cycle_%d_2.csv"%i, w_array[:, :], delimiter=",")
+    np.savetxt("simplified_actuator_tc_long_data_cycle_%d_3.csv"%i, w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
