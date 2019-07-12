@@ -25,17 +25,20 @@ w_initial = np.zeros((1, 4))
 num_cycles_per_step = int(CONTROL_STEP/time_period)
 
 for i in range(0, num_steps):
-    w_array = w_initial     # initialising angular velocity for the control step
-    time = np.array([i*2])      # initialising the time array for the control step
+
+    time = np.array([i*CONTROL_STEP])      # initialising the time array for the control step
     duty = np.array([3, 4, 5])*1e-3       # initialising the duty cycle
 
     timeArr = tc.getTimeArr(duty)   # getting the time array for one PWM cycle
     num_instants_per_cycle = len(timeArr)
     for j in range(0, num_cycles_per_step):
-        time = np.concatenate((time, timeArr+j*time_period))    # setting the time array for the whole step
+        time = np.concatenate((time, timeArr + j*time_period + i*CONTROL_STEP))    # setting the time array for the whole step
 
     edgeCurrentArray = aac.getEdgeCurrent(duty, I0)     # getting the current at the edges
 
+    w_array = np.zeros((len(time), 4))
+    w_array[0] = w_initial
+    w_array[:, 0] = time
     for j in range(0, num_cycles_per_step):
         print("step ", i+1, " cycle ", j)
         for k in range(j*num_instants_per_cycle, (j+1)*num_instants_per_cycle):
@@ -47,10 +50,9 @@ for i in range(0, num_steps):
             k2 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k3 = w_dot_BI(currentArray[1], getMag_b(intTimeArr[1])) * h
             k4 = w_dot_BI(currentArray[2], getMag_b(intTimeArr[2])) * h
-            angular_velocity_new = np.hstack((time[k+1] + i*CONTROL_STEP, w_array[k, 1:4]+(k1+2*k2+2*k3+k4)/6))
-            w_array = np.vstack((w_array, angular_velocity_new))
+            w_array[k + 1, 1:4] = w_array[k, 1:4]+(k1+2*k2+2*k3+k4)/6
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
     w_initial = np.array([w_array[len(w_array)-1]])
-    np.savetxt("simplified_actuator_tc_long_data_cycle_%d_3.csv"%i, w_array[:, :], delimiter=",")
+    np.savetxt("simplified_actuator_tc_long_data_cycle_%d_4.csv"%i, w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
