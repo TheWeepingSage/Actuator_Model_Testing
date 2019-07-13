@@ -5,7 +5,7 @@ import numpy as np
 
 t_p = 1/PWM_FREQUENCY
 w_array = np.zeros((1, 3))
-num_steps = 2
+num_steps = 5
 I0 = np.zeros(3)
 num_cycles_per_step = int(CONTROL_STEP/t_p)
 
@@ -19,11 +19,12 @@ def integral_current_step(v_duty_cycle, v_edgeCurrent):
     return res
 
 
-duty = np.array([3, 4, 5])*1e-3
+
 for i in range(0, num_steps):
+    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**2)
     edgeCurrent = aac.getEdgeCurrent(duty, I0)
     for j in range(0, num_cycles_per_step):
         angular_velocity = w_array[i*num_cycles_per_step+j] + integral_current_step(duty, edgeCurrent[2*j])
         w_array = np.vstack((w_array, angular_velocity))
     I0 = edgeCurrent[len(edgeCurrent) - 1]
-np.savetxt("simplified_actuator_true_long_data_3.csv", w_array[:, :], delimiter=",")
+np.savetxt("simplified_actuator_true_long_data_five_steps.csv", w_array[:, :], delimiter=",")

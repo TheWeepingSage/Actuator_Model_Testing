@@ -20,14 +20,14 @@ def getMag_b(time):     # defining the magnetic field in the body frame(constant
 
 I0 = np.zeros(3)    # initial current is 0
 time_period = 1/PWM_FREQUENCY
-num_steps = 2
+num_steps = 5
 w_initial = np.zeros((1, 4))
 num_cycles_per_step = int(CONTROL_STEP/time_period)
 
 for i in range(0, num_steps):
 
     time = np.array([i*CONTROL_STEP])      # initialising the time array for the control step
-    duty = np.array([3, 4, 5])*1e-3       # initialising the duty cycle
+    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**2)     # initialising the duty cycle
 
     timeArr = tc.getTimeArr(duty)   # getting the time array for one PWM cycle
     num_instants_per_cycle = len(timeArr)
@@ -39,8 +39,8 @@ for i in range(0, num_steps):
     w_array = np.zeros((len(time), 4))
     w_array[0] = w_initial
     w_array[:, 0] = time
+    print("Step ", i + 1)
     for j in range(0, num_cycles_per_step):
-        print("step ", i+1, " cycle ", j)
         for k in range(j*num_instants_per_cycle, (j+1)*num_instants_per_cycle):
             intTimeArr1 = np.linspace(time[k]%2, time[k+1]%2, 3, endpoint=True)      # setting the time array for the integration step
             intTimeArr = np.linspace(time[k], time[k+1], 3, endpoint=True)
@@ -53,6 +53,6 @@ for i in range(0, num_steps):
             w_array[k + 1, 1:4] = w_array[k, 1:4]+(k1+2*k2+2*k3+k4)/6
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
     w_initial = np.array([w_array[len(w_array)-1]])
-    np.savetxt("simplified_actuator_tc_long_data_cycle_%d_4.csv"%i, w_array[:, :], delimiter=",")
+    np.savetxt("simplified_actuator_tc_long_data_step_%d.csv"%(i+1), w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)
