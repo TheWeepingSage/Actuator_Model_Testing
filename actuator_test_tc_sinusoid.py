@@ -14,7 +14,7 @@ def w_dot_BI(current, b):   # defining the dynamics for the system
 
 
 def getMag_b(t):     # defining the magnetic field in the body frame(constant in the body frame so that we can integrate analytically)
-    v_mag_b = np.sin(np.array([1, 2, 3])*2*np.pi*1e-3*t)      # B =(1e-3, 2e-3, 3e-3)
+    v_mag_b = np.sin(np.array([1, 2, 3])*2*np.pi/1e-3*t)      # B =sin((1e-3, 2e-3, 3e-3)*2pi/T*t)
     return v_mag_b
 
 
@@ -27,7 +27,7 @@ num_cycles_per_step = int(CONTROL_STEP/time_period)
 for i in range(0, num_steps):
 
     time = np.array([i*CONTROL_STEP])      # initialising the time array for the control step
-    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**2)     # initialising the duty cycle
+    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**i)     # initialising the duty cycle
 
     timeArr = tc.getTimeArr(duty)   # getting the time array for one PWM cycle
     num_instants_per_cycle = len(timeArr)
@@ -53,6 +53,6 @@ for i in range(0, num_steps):
             w_array[k + 1, 1:4] = w_array[k, 1:4]+(k1+2*k2+2*k3+k4)/6
     I0 = edgeCurrentArray[len(edgeCurrentArray) - 1]
     w_initial = np.array([w_array[len(w_array)-1]])
-    np.savetxt("simplified_actuator_tc_long_data_step_%d.csv"%(i+1), w_array[:, :], delimiter=",")
+    np.savetxt("actuator_test_tc_sinusoid_step_%d.csv"%(i+1), w_array[:, :], delimiter=",")
 end = timer.time()
 print(end-start)

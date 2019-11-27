@@ -21,10 +21,10 @@ def int_exp_cos(k, w, t):   # integral of exp(-kt)cos(wt)dt from 0 to t
 def int_mi_x_bi(n1, t1, I_0):   # integral of I_i*B_i*A
     k_exp = R/L     # defining k_exp
     w_sin = 2*np.pi*n1/t_p      # defining w_sin
-    res = V_max/R/w_sin*(1-np.cos(w_sin*t1)) - (V_max/R-I_0)*int_exp_sin(k_exp, w_sin, t1)  # first part of the integral for teh rising part of current
+    res = V_max*(1-np.cos(w_sin*t1))/R/w_sin - (V_max/R-I_0)*int_exp_sin(k_exp, w_sin, t1)  # first part of the integral for teh rising part of current
     res2 = (V_max/R -(V_max/R-I_0)*np.exp(-k_exp*t1))   # second part of the integral for teh falling part oof the current
     res2 *= (np.cos(w_sin*t1)*int_exp_sin(k_exp, w_sin, t_p-t1) - np.sin(w_sin*t1)*int_exp_cos(k_exp, w_sin, t_p-t1))
-    return (res + res2)*v_A_Torquer[0]  # returning the sum of the two parts
+    return (res + res2)*v_A_Torquer[0] # returning the sum of the two parts
 
 
 def m_x_b(n1, n2, v_duty_cycle, v_edgeCurrent):     # calculating the value of one component of the integral of mxb
@@ -43,10 +43,10 @@ def integral_current_step(v_duty_cycle, v_edgeCurrent):     # calculating all th
 
 
 for i in range(0, num_steps):   # iterating over the entire duration and returning the array of angular velocities
-    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**2)
+    duty = np.array([i+1, i+2, i+3]) * 1e-3*((-1)**i)
     edgeCurrent = aac.getEdgeCurrent(duty, I0)
     for j in range(0, num_cycles_per_step):
         angular_velocity = w_array[i*num_cycles_per_step+j] + integral_current_step(duty, edgeCurrent[2*j])
         w_array = np.vstack((w_array, angular_velocity))
     I0 = edgeCurrent[len(edgeCurrent) - 1]
-np.savetxt("actuator_test_sinusoid_true.csv", w_array[:, :], delimiter=",")
+# np.savetxt("actuator_test_sinusoid_true.csv", w_array[:, :], delimiter=",")

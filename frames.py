@@ -110,7 +110,7 @@ def qBO2qBI(v_q_BO,v_pos_i,v_vel_i):
 	v_q_BI = qnv.quatMultiplyNorm(v_q_BO,v_q_OI)
 	if v_q_BI[3] < 0. :
 		v_q_BI = -1.*v_q_BI.copy()
-	v_qBI = v_q_BI/np.linalg.norm(v_q_BI.copy())	
+	v_q_BI = v_q_BI/np.linalg.norm(v_q_BI.copy())
 	return v_q_BI
 
 def wBIb2wBOb(v_w_BI_b,v_q_BO,v_w_IO_o):
