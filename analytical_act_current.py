@@ -1,8 +1,8 @@
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 from constants_1U import RESISTANCE, INDUCTANCE, PWM_AMPLITUDE, PWM_FREQUENCY, CONTROL_STEP
 import math
-import time
+# import time
 
 
 def getEdgeCurrent(v_duty_cycle, I0):   # to return an array with current at the edges, input: duty cycle, initial current
