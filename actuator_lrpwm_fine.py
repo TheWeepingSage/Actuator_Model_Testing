@@ -1,6 +1,6 @@
 import numpy as np
 from qnv import quatRotate, quatDerBI
-from constants_1U import v_A_Torquer, CONTROL_STEP, PWM_FREQUENCY, PWM_AMPLITUDE, RESISTANCE, INDUCTANCE, Ixx, Ixy, Ixz, Iyy, Iyz, Izz
+from constants_1U import v_A_Torquer, CONTROL_STEP, PWM_FREQUENCY, PWM_AMPLITUDE, Ixx, Ixy, Ixz, Iyy, Iyz, Izz
 import analytical_act_current as aac
 
 

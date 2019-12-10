@@ -20,7 +20,7 @@ for i in range(1, int(CONTROL_STEP*PWM_FREQUENCY)):
     time_array_pwm = np.append(time_array_pwm, time_cycle + i / PWM_FREQUENCY)
 stateArray_dc = np.loadtxt("actuator_dc_state.csv", delimiter=",")
 stateArray_pwm = np.loadtxt("actuator_pwm_state.csv", delimiter=",")
-# plt.plot(time_array_dc[:], stateArray_dc[:, 3], label="DC quaternion")
+plt.plot(time_array_dc[:], stateArray_dc[:, 0], label="DC quaternion")
 plt.plot(time_array_pwm[:], stateArray_pwm[:, 0], label="PWM Quaternion")
 plt.ylabel("Quaternion component 1")
 plt.legend(loc="upper right")
